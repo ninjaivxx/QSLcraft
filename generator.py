@@ -1,17 +1,30 @@
-from PIL import Image, ImageDraw, ImageFont
-from utils import draw_centered_text
+import os
+from PIL import Image, ImageDraw
+
+def draw_centered_text(draw, text, position, font):
+    bbox = draw.textbbox((0, 0), text, font=font)
+    x = position[0] - (bbox[2] - bbox[0]) // 2
+    y = position[1] - (bbox[3] - bbox[1]) // 2
+    draw.text((x, y), text, font=font, fill="black")
 
 def generate_card(qso, positions, font, image_path, output_dir):
     card = Image.open(image_path).convert("RGBA")
     draw = ImageDraw.Draw(card)
-    draw_centered_text(draw, qso.get("call", "").lower(), positions["call"], font)
-    date_fmt = qso.get("qso_date", "")
-    date_fmt = f"{date_fmt[:4]} {date_fmt[4:6]} {date_fmt[6:]}" if len(date_fmt) == 8 else ""
-    draw_centered_text(draw, date_fmt, positions["date"], font)
-    draw_centered_text(draw, qso.get("time_on", ""), positions["utc"], font)
-    draw_centered_text(draw, qso.get("band", ""), positions["band"], font)
-    draw_centered_text(draw, qso.get("mode", ""), positions["mode"], font)
-    draw_centered_text(draw, qso.get("rst_rcvd", ""), positions["report"], font)
 
-    filename = f"qsl_{qso.get('call', 'unknown')}_{qso.get('qso_date', '')}.png"
-    card.save(os.path.join(output_dir, filename))
+    call = qso.get("call", "").upper()
+    date = qso.get("qso_date", "")
+    date_fmt = f"{date[:4]} {date[4:6]} {date[6:]}" if len(date) == 8 else ""
+    utc = qso.get("time_on", "")
+    band = qso.get("band", "")
+    mode = qso.get("mode", "").upper()
+    rst = qso.get("rst_rcvd", "")
+
+    draw_centered_text(draw, call, positions["call"], font)
+    draw_centered_text(draw, date_fmt, positions["date"], font)
+    draw_centered_text(draw, utc, positions["utc"], font)
+    draw_centered_text(draw, band, positions["band"], font)
+    draw_centered_text(draw, mode, positions["mode"], font)
+    draw_centered_text(draw, rst, positions["report"], font)
+
+    out_path = os.path.join(output_dir, f"qsl_{call}_{date}.png")
+    card.save(out_path)

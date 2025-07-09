@@ -1,42 +1,115 @@
-# QSL Card Generator
+# 📡 QSL Card Generator
 
-This tool helps amateur radio operators generate QSL cards from ADIF logs with custom background images.
+A cross-platform desktop app for generating custom QSL cards from ADIF log files. Easily customize field positions, fonts, filters, and profiles using a visual GUI.
 
-## 📁 Project Structure
+---
 
+## 🚀 Features
+
+- 📁 Load an ADIF log and QSL card image
+- 🖱️ Click on the image to set text field positions
+- 🗂️ Save/load profiles with all settings
+- 🧾 Filter by all contacts, single callsign, or date range
+- 🔤 Live preview of field text on card
+- 💾 Export QSL cards to PNG
+
+---
+
+## 📦 Requirements
+
+- Python 3.10 or newer
+- pip (comes with Python)
+- Pillow (`pip install Pillow`)
+
+---
+
+## 🔧 Setup Instructions
+
+### 1. Clone or Download
+
+```bash
+git clone https://github.com/YOUR-USERNAME/qsl-card-generator.git
+cd qsl-card-generator
 ```
-qsl_card_generator/
-├── main.py                # Entry point to launch the GUI
-├── adif_parser.py         # Parses ADIF files
-├── generator.py           # QSL image generator
-├── gui_components.py      # GUI interface and layout
-├── profiles.py            # Handles profile save/load/delete
-├── utils.py               # Utility functions (text drawing, tooltips)
-├── qsl_profiles.json      # Auto-saved profiles (created at runtime)
-└── assets/                # (Optional) Put your fonts/images here
+
+Or [Download ZIP](https://github.com/YOUR-USERNAME/qsl-card-generator/archive/refs/heads/main.zip) and extract it.
+
+---
+
+### 2. Create a Virtual Environment (Optional but Recommended)
+
+```bash
+python -m venv .venv
 ```
 
-## ✅ Requirements
+Activate it:
 
-- Python 3.7+
-- Pillow
+- **Windows:**
+  ```bash
+  .venv\Scripts\activate
+  ```
+- **macOS/Linux:**
+  ```bash
+  source .venv/bin/activate
+  ```
 
-Install dependencies with:
+---
+
+### 3. Install Dependencies
+
 ```bash
 pip install -r requirements.txt
 ```
 
-## 🚀 Running the App
+---
 
-From the terminal:
+### 4. Run the App
+
 ```bash
 python main.py
 ```
 
-## 💡 Features
+---
 
-- Load and filter ADIF logs (all, single callsign, or by date/time range)
-- Customizable font and position per QSO field
-- Save and reuse profiles
-- Dynamic tooltips and error checking
+## 🖼️ Usage Instructions
 
+- Select your QSL card background image
+- Load your ADIF log
+- Choose a filter option:
+  - All QSOs
+  - One callsign
+  - Date/time range
+- Click on the image to place field positions
+- Save a profile to reuse your settings
+- Click **Generate QSL Cards** to export
+
+---
+
+## 📁 File Structure
+
+```
+qsl-card-generator/
+├── main.py
+├── adif_parser.py
+├── generator.py
+├── gui_components.py
+├── profiles.py
+├── utils.py
+├── requirements.txt
+├── README.md
+└── DejaVuSans-Bold.ttf
+```
+
+---
+
+## 🧰 Helpful Tips
+
+- If fonts don't show up, check that the `.ttf` file is valid
+- Profiles are saved to `qsl_profiles.json` in the same directory
+- For troubleshooting, delete `qsl_profiles.json` to reset
+
+---
+
+## 📃 License
+
+MIT License

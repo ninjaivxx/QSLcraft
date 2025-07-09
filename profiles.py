@@ -1,7 +1,7 @@
 import os
 import json
 
-PROFILE_PATH = "qsl_profiles.json"
+PROFILE_PATH = os.path.join(os.path.dirname(__file__), "qsl_profiles.json")
 
 def load_profiles():
     if os.path.exists(PROFILE_PATH):
