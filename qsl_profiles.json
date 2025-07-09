@@ -4,6 +4,32 @@
     "adif": "C:/Users/ninja/Desktop/kf0kif.348504.20241001231455.adi",
     "output": "C:/Users/ninja/Downloads/Test",
     "font": "C:/Users/ninja/Downloads/dejavu-fonts-ttf-2.37/dejavu-fonts-ttf-2.37/ttf/DejaVuSans-Bold.ttf",
-    "size": 48
+    "size": 48,
+    "positions": {
+      "call": [
+        89,
+        452
+      ],
+      "date": [
+        295,
+        440
+      ],
+      "utc": [
+        480,
+        452
+      ],
+      "band": [
+        555,
+        450
+      ],
+      "mode": [
+        645,
+        452
+      ],
+      "report": [
+        743,
+        450
+      ]
+    }
   }
 }

@@ -1,4 +1,4 @@
 from gui_components import run_gui
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     run_gui()
