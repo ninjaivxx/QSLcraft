@@ -1,4 +1,3 @@
-
 import tkinter as tk
 
 def create_tooltip(widget, text):

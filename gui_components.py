@@ -1,4 +1,3 @@
-
 import os
 import json
 import re
@@ -33,7 +32,6 @@ def run_gui():
         "report": [1545, 950],
     }
     field_markers = {}
-    field_labels = {}
 
     canvas = tk.Canvas(root, width=800, height=501, bg="gray")
     canvas.grid(row=8, column=0, columnspan=4, pady=10)
@@ -140,13 +138,31 @@ def run_gui():
                 profile_combo.set('')
                 messagebox.showinfo("Deleted", f"Deleted profile '{name}'.")
 
+    def update_filter_fields(*args):
+        selected = filter_var.get()
+        if selected == 'One':
+            call_entry.config(state='normal')
+            start_entry.config(state='disabled')
+            end_entry.config(state='disabled')
+        elif selected == 'Range':
+            call_entry.config(state='disabled')
+            start_entry.config(state='normal')
+            end_entry.config(state='normal')
+        else:
+            call_entry.config(state='disabled')
+            start_entry.config(state='disabled')
+            end_entry.config(state='disabled')
+
     def generate_cards():
-        from tkinter.font import Font
         adif_path = adif_path_var.get()
         image_path = image_path_var.get()
         output_dir = output_path_var.get()
         font_path = font_path_var.get() or DEFAULT_FONT
         size = font_size_var.get()
+        filter_mode = filter_var.get()
+        call_filter = call_entry.get().strip().upper()
+        start = start_entry.get().strip()
+        end = end_entry.get().strip()
 
         if not os.path.isfile(adif_path) or not os.path.isfile(image_path):
             messagebox.showerror("Error", "Missing ADIF or image file.")
@@ -159,6 +175,14 @@ def run_gui():
             return
 
         qsos = parse_adif(adif_path)
+
+        if filter_mode == "One":
+            qsos = [q for q in qsos if q.get("call", "").upper() == call_filter]
+        elif filter_mode == "Range":
+            def qso_time(q):
+                return q.get("qso_date", "") + q.get("time_on", "")
+            qsos = [q for q in qsos if start <= qso_time(q) <= end]
+
         for qso in qsos:
             generate_card(qso, field_positions, font, image_path, output_dir)
 
@@ -198,4 +222,31 @@ def run_gui():
     ttk.Button(root, text="Reset Markers", command=reset_markers).grid(row=7, column=2, columnspan=2)
 
     canvas.bind("<Button-1>", on_canvas_click)
+
+    filter_frame = ttk.LabelFrame(root, text="Filter Options")
+    filter_frame.grid(row=9, column=0, columnspan=4, pady=10, sticky="ew")
+
+    filter_var = tk.StringVar(value='All')
+    ttk.Radiobutton(filter_frame, text="All", variable=filter_var, value='All').grid(row=0, column=0, sticky="w")
+    ttk.Radiobutton(filter_frame, text="One (Callsign Required)", variable=filter_var, value='One').grid(row=1, column=0, sticky="w")
+    ttk.Radiobutton(filter_frame, text="Range (Start and End Datetime YYYYMMDD[HHMMSS])", variable=filter_var, value='Range').grid(row=2, column=0, sticky="w")
+
+    ttk.Label(filter_frame, text="Callsign:").grid(row=1, column=1, sticky="e")
+    call_entry = ttk.Entry(filter_frame)
+    call_entry.grid(row=1, column=2)
+
+    ttk.Label(filter_frame, text="Start Datetime:").grid(row=2, column=1, sticky="e")
+    start_entry = ttk.Entry(filter_frame)
+    start_entry.grid(row=2, column=2)
+
+    ttk.Label(filter_frame, text="End Datetime:").grid(row=3, column=1, sticky="e")
+    end_entry = ttk.Entry(filter_frame)
+    end_entry.grid(row=3, column=2)
+
+    call_entry.config(state='disabled')
+    start_entry.config(state='disabled')
+    end_entry.config(state='disabled')
+
+    filter_var.trace_add('write', update_filter_fields)
+
     root.mainloop()

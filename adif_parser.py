@@ -1,4 +1,3 @@
-
 import re
 
 def parse_adif(file_path):
