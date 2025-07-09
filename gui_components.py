@@ -1,7 +1,7 @@
 import os
 import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
-from PIL import ImageFont
+from PIL import Image, ImageFont, ImageTk
 from adif_parser import parse_adif
 from generator import generate_card
 from profiles import load_profiles, save_profiles
@@ -100,10 +100,7 @@ def run_gui():
     root = tk.Tk()
     root.title("QSL Card Generator")
 
-    global profiles
     profiles = load_profiles()
-
-    global profile_var
     profile_var = tk.StringVar()
     image_path_var = tk.StringVar()
     adif_path_var = tk.StringVar()
@@ -190,45 +187,21 @@ def run_gui():
 
     filter_var.trace_add('write', update_filter_fields)
 
-    pos_frame = ttk.LabelFrame(root, text="Field Positions")
-    pos_frame.grid(row=7, column=0, columnspan=4, pady=10)
-    for idx, (label, var_x, var_y) in enumerate([
-        ("Call", call_x, call_y),
-        ("Date", date_x, date_y),
-        ("UTC", utc_x, utc_y),
-        ("Band", band_x, band_y),
-        ("Mode", mode_x, mode_y),
-        ("Report", report_x, report_y),
-    ]):
-        ttk.Label(pos_frame, text=f"{label} X:").grid(row=idx, column=0)
-        ttk.Spinbox(pos_frame, from_=0, to=3000, textvariable=var_x, width=6).grid(row=idx, column=1)
-        ttk.Label(pos_frame, text=f"{label} Y:").grid(row=idx, column=2)
-        ttk.Spinbox(pos_frame, from_=0, to=3000, textvariable=var_y, width=6).grid(row=idx, column=3)
-
-    ttk.Button(root, text="Generate QSL Cards", command=generate_cards).grid(row=8, column=0, columnspan=4, pady=10)
-    root.mainloop()
-# Image click positioning setup
-    ttk.Label(root, text="Interactive Positioning:").grid(row=9, column=0, sticky="w", padx=10)
-    pos_frame = ttk.Frame(root)
-    pos_frame.grid(row=10, column=0, columnspan=4, sticky="ew", padx=10, pady=5)
-
+    # Interactive Positioning Section
+    ttk.Label(root, text="Select Field to Position:").grid(row=7, column=0, sticky="e")
     selected_field = tk.StringVar(value="call")
-    ttk.Label(pos_frame, text="Select Field:").grid(row=0, column=0)
-    ttk.OptionMenu(pos_frame, selected_field, "call", "call", "date", "utc", "band", "mode", "report").grid(row=0, column=1)
+    field_menu = ttk.OptionMenu(root, selected_field, "call", "call", "date", "utc", "band", "mode", "report")
+    field_menu.grid(row=7, column=1, sticky="w")
 
-    canvas_frame = ttk.Frame(root)
-    canvas_frame.grid(row=11, column=0, columnspan=4, pady=10)
-
-    canvas = tk.Canvas(canvas_frame, width=800, height=501, bg="white")
-    canvas.pack()
+    canvas = tk.Canvas(root, width=800, height=501, bg="white")
+    canvas.grid(row=8, column=0, columnspan=4, pady=10)
 
     loaded_img = None
     tk_img = None
 
-    def refresh_image():
+    def refresh_image(*args):
         nonlocal loaded_img, tk_img
         try:
-            from PIL import ImageTk
             img_path = image_path_var.get()
             if not img_path or not os.path.exists(img_path):
                 return
@@ -264,4 +237,7 @@ def run_gui():
         canvas.create_text(x+10, y, text=field, anchor="w", fill="black")
 
     canvas.bind("<Button-1>", on_canvas_click)
-    image_path_var.trace_add('write', lambda *args: refresh_image())
+    image_path_var.trace_add("write", refresh_image)
+
+    ttk.Button(root, text="Generate QSL Cards", command=generate_cards).grid(row=9, column=0, columnspan=4, pady=10)
+    root.mainloop()
