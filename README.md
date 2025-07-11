@@ -29,6 +29,7 @@ An installer `.exe` will be made available in the [Releases](https://github.com/
 ### 🐍 Python Users
 
 Make sure you have Python 3.9+ and `pip` installed:
+
 For Windows 
 ```bash
 git clone https://github.com/ninjaivxx/QSLcraft.git
