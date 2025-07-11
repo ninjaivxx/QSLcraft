@@ -29,9 +29,21 @@ An installer `.exe` will be made available in the [Releases](https://github.com/
 ### 🐍 Python Users
 
 Make sure you have Python 3.9+ and `pip` installed:
-
+For Windows 
 ```bash
 git clone https://github.com/ninjaivxx/QSLcraft.git
 cd QSLcraft
+python -m venv .venv
+venv\Scripts\activate
 pip install -r requirements.txt
 python main.py
+```
+For Mac \ Linux
+```bash
+git clone https://github.com/ninjaivxx/QSLcraft.git
+cd QSLcraft
+python -m venv .venv
+source ./.venv/bin/activate
+pip install -r requirements.txt
+python main.py
+```
