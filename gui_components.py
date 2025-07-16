@@ -17,8 +17,8 @@ def run_gui():
 
     image_path_var = tk.StringVar()
     adif_path_var = tk.StringVar()
-    output_path_var = tk.StringVar()
-    font_path_var = tk.StringVar()
+    output_path_var = tk.StringVar(value=os.path.join(os.path.dirname(__file__), "output"))
+    font_path_var = tk.StringVar(value=os.path.join(os.path.dirname(__file__), "fonts", "TT2020StyleG-Regular-ASCII.ttf"))
     font_size_var = tk.IntVar(value=48)
     profiles = load_profiles()
 
@@ -182,6 +182,10 @@ def run_gui():
             def qso_time(q):
                 return q.get("qso_date", "") + q.get("time_on", "")
             qsos = [q for q in qsos if start <= qso_time(q) <= end]
+
+        # Check to see if Output directory exists, if not create it
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
 
         for qso in qsos:
             generate_card(qso, field_positions, font, image_path, output_dir)
