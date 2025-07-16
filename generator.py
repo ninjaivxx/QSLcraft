@@ -15,7 +15,7 @@ def generate_card(qso, positions, font, image_path, output_dir):
     date = qso.get("qso_date", "")
     date_fmt = f"{date[:4]} {date[4:6]} {date[6:]}" if len(date) == 8 else ""
     utc = qso.get("time_on", "")
-    utc_fmt = f"{utc[:2]}:{utc[2:4]}" if len(utc) == 6 else ""
+    utc_fmt = f"{utc[:2]}:{utc[2:4]}" if len(utc) >= 4 else ""
     band = qso.get("band", "")
     mode = qso.get("mode", "").upper()
     rst = qso.get("rst_rcvd", "")
