@@ -48,3 +48,7 @@ source ./.venv/bin/activate
 pip install -r requirements.txt
 python main.py
 ```
+
+
+# Credits
+[TT2020StyleG-Regular-ASCII](https://copypaste.wtf/TT2020/docs/) Font is licensed under [SIL Open Font License](https://openfontlicense.org/#5667e9e4) and is used as the default font.
