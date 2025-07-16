@@ -67,7 +67,7 @@ def run_gui():
             for i in field_markers[field]:
                 canvas.delete(i)
         circle = canvas.create_oval(event.x - 3, event.y - 3, event.x + 3, event.y + 3, fill="red")
-        label = canvas.create_text(event.x + 10, event.y, text=f"{field.upper()}: SAMPLE", anchor="w", fill="black")
+        label = canvas.create_text(event.x + 10, event.y, text=f"{field.upper()}", anchor="w", fill="black")
         field_markers[field] = (circle, label)
 
     def reset_markers():
