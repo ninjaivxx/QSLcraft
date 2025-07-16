@@ -55,7 +55,7 @@ def run_gui():
         for key, (x, y) in field_positions.items():
             sx, sy = x / scale_ratio[0], y / scale_ratio[1]
             circle = canvas.create_oval(sx-3, sy-3, sx+3, sy+3, fill="red")
-            label = canvas.create_text(sx + 10, sy, text=f"{key.upper()}: SAMPLE", anchor="w", fill="black")
+            label = canvas.create_text(sx + 10, sy, text=f"{key.upper()}", anchor="w", fill="black")
             field_markers[key] = (circle, label)
 
     def on_canvas_click(event):
