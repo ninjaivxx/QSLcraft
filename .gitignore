@@ -4,11 +4,11 @@ qsl_profiles.json
 # Virtual environment that is recommended in the Readme
 .venv
 
-#default Output directory
+# Default Output directory
 output/
 
 # Byte-compiled / optimized / DLL files
-__pycache__/
+__pycache__
 *.py[codz]
 *$py.class
 
