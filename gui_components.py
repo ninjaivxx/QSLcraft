@@ -17,8 +17,8 @@ def run_gui():
 
     image_path_var = tk.StringVar()
     adif_path_var = tk.StringVar()
-    output_path_var = tk.StringVar()
-    font_path_var = tk.StringVar()
+    output_path_var = tk.StringVar(value=os.path.join(os.path.dirname(__file__), "output"))
+    font_path_var = tk.StringVar(value=os.path.join(os.path.dirname(__file__), "fonts", "TT2020StyleG-Regular-ASCII.ttf"))
     font_size_var = tk.IntVar(value=48)
     profiles = load_profiles()
 
@@ -55,7 +55,7 @@ def run_gui():
         for key, (x, y) in field_positions.items():
             sx, sy = x / scale_ratio[0], y / scale_ratio[1]
             circle = canvas.create_oval(sx-3, sy-3, sx+3, sy+3, fill="red")
-            label = canvas.create_text(sx + 10, sy, text=f"{key.upper()}: SAMPLE", anchor="w", fill="black")
+            label = canvas.create_text(sx + 10, sy, text=f"{key.upper()}", anchor="w", fill="black")
             field_markers[key] = (circle, label)
 
     def on_canvas_click(event):
@@ -67,7 +67,7 @@ def run_gui():
             for i in field_markers[field]:
                 canvas.delete(i)
         circle = canvas.create_oval(event.x - 3, event.y - 3, event.x + 3, event.y + 3, fill="red")
-        label = canvas.create_text(event.x + 10, event.y, text=f"{field.upper()}: SAMPLE", anchor="w", fill="black")
+        label = canvas.create_text(event.x + 10, event.y, text=f"{field.upper()}", anchor="w", fill="black")
         field_markers[field] = (circle, label)
 
     def reset_markers():
@@ -182,6 +182,10 @@ def run_gui():
             def qso_time(q):
                 return q.get("qso_date", "") + q.get("time_on", "")
             qsos = [q for q in qsos if start <= qso_time(q) <= end]
+
+        # Check to see if Output directory exists, if not create it
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
 
         for qso in qsos:
             generate_card(qso, field_positions, font, image_path, output_dir)
