@@ -45,7 +45,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: windows-executables
-        path: dist/
+        path: dist/QSLcraft.exe
 
     - name: Create Artifact (Linux)
       if: matrix.os == 'ubuntu-latest'
@@ -53,17 +53,13 @@ jobs:
       with:
         name: linux-executables
         path: dist/
-
-    # - name: Create Artifact (macOS)
-    #   if: matrix.os == 'macos-latest'
-    #   run: dmgbuild -s settings.py "QSLcraft" dist/QSLcraft.dmg
-
+      
     - name: Upload Artifact (macOS)
       if: matrix.os == 'macos-latest'
       uses: actions/upload-artifact@v4
       with:
         name: macos-executables
-        path: dist/
+        path: dist/QSLcraft.app
 
     - name: List files in dist folder
       run: ls -R ./dist/
