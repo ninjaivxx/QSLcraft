@@ -60,6 +60,9 @@ jobs:
       with:
         name: macos-executables
         path: dist/
+      run: dmgbuild -s settings.py "QSLcraft" QSLcraft.dmg
+
+
 
     - name: List files in dist folder
       run: ls -R ./dist/
