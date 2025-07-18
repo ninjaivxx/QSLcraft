@@ -9,15 +9,13 @@ from generator import generate_card
 from profiles import load_profiles, save_profiles
 from utils import create_tooltip
 
-DEFAULT_FONT = os.path.join(os.path.dirname(__file__), "DejaVuSans-Bold.ttf")
-
 def run_gui():
     root = tk.Tk()
     root.title("QSL Card Generator")
 
     image_path_var = tk.StringVar()
     adif_path_var = tk.StringVar()
-    output_path_var = tk.StringVar(value=os.path.join(os.path.dirname(__file__), "output"))
+    output_path_var = tk.StringVar()
     font_path_var = tk.StringVar(value=os.path.join(os.path.dirname(__file__), "fonts", "TT2020StyleG-Regular-ASCII.ttf"))
     font_size_var = tk.IntVar(value=48)
     profiles = load_profiles()
