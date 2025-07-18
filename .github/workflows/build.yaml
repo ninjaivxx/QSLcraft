@@ -57,8 +57,10 @@ jobs:
     - name: Create Artifact (macOS)
       if: matrix.os == 'macos-latest'
       steps:
-        - run: dmgbuild -s settings.py "QSLcraft" dist/QSLcraft.dmg
-        - uses: actions/upload-artifact@v4
+        - name: Build DMG 
+          run: dmgbuild -s settings.py "QSLcraft" dist/QSLcraft.dmg
+        - name: Upload Artifact (macOS)
+          uses: actions/upload-artifact@v4
           with:
             name: macos-executables
             path: dist/
