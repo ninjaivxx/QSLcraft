@@ -1,9 +1,11 @@
 name: Build QSLcraft Executables
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Enter the version (e.g., v1.0.0)"
+        required: true
 
 jobs:
   build:
@@ -63,3 +65,34 @@ jobs:
 
     - name: List files in dist folder
       run: ls -R ./dist/
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download all build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          merge-multiple: false
+
+      - name: List downloaded files (Debugging)
+        run: ls -R
+
+      # - name: Make files executable (Linux/Mac)
+      #   run: chmod +x app-* || true
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.inputs.version }}
+          name: Release ${{ github.event.inputs.version }}
+          draft: false
+          prerelease: false
+          files: |
+            QSLcraft-linux
+            QSLcraft-windows
+            QSLcraft-macos
