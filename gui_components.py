@@ -6,7 +6,7 @@ import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 from adif_parser import parse_adif
 from generator import generate_card
-from profiles import load_profiles, save_profiles
+from profiles import backup_profiles, load_profiles, save_profiles
 from utils import create_tooltip
 
 def run_gui():
@@ -165,7 +165,10 @@ def run_gui():
         if not os.path.isfile(adif_path) or not os.path.isfile(image_path):
             messagebox.showerror("Error", "Missing ADIF or image file.")
             return
-
+        if not os.path.isdir(output_dir):
+            messagebox.showerror("Error", "Output directory not selected.")
+            return  
+        
         try:
             font = ImageFont.truetype(font_path, size)
         except Exception as e:
@@ -190,9 +193,35 @@ def run_gui():
 
         messagebox.showinfo("Done", f"Generated {len(qsos)} QSL card(s).")
 
+
+    def select_backup_dir():
+        backup_dir = filedialog.askdirectory(title="Select Backup Directory")
+        if not backup_dir:
+            messagebox.showerror("Error", "No backup directory selected.")
+            return
+
+        backup_profiles(backup_dir)
+
+    def select_restore_file():
+        restore_file = filedialog.askopenfilename(title="Select Profile Backup File", filetypes=[("JSON Files", "*.json")])
+        if not restore_file:
+            messagebox.showerror("Error", "No restore file selected.")
+            return
+
+        try:
+            with open(restore_file, 'r') as f:
+                restored_profiles = json.load(f)
+            profiles.update(restored_profiles)
+            save_profiles(profiles)
+            profile_combo['values'] = list(profiles.keys())
+            messagebox.showinfo("Restored", "Profiles restored successfully.")
+        except Exception as e:
+            messagebox.showerror("Restore Error", str(e))
+
     # GUI LAYOUT
     ttk.Label(root, text="Profile:").grid(row=0, column=0, sticky="e")
     profile_combo = ttk.Combobox(root, values=list(profiles.keys()))
+
     profile_combo.grid(row=0, column=1)
     profile_combo.bind("<<ComboboxSelected>>", apply_profile)
     ttk.Button(root, text="Save Profile", command=save_current_profile).grid(row=0, column=2)
@@ -214,14 +243,15 @@ def run_gui():
     ttk.Entry(root, textvariable=font_path_var, width=40).grid(row=4, column=1)
     ttk.Button(root, text="Browse", command=select_font_file).grid(row=4, column=2)
 
-    ttk.Label(root, text="Font Size:").grid(row=5, column=0, sticky="e")
-    ttk.Spinbox(root, from_=12, to=200, textvariable=font_size_var, width=5).grid(row=5, column=1, sticky="w")
+    ttk.Label(root, text="Select Field to Position:").grid(row=5, column=0, sticky="e")
+    ttk.OptionMenu(root, selected_field, selected_field.get(), *field_positions.keys()).grid(row=5, column=1, sticky="w")
+    ttk.Button(root, text="Reset Markers", command=reset_markers).grid(row=5, column=1)
+    ttk.Label(root, text="Font Size:").grid(row=5, column=2)
+    ttk.Spinbox(root, from_=12, to=200, textvariable=font_size_var, width=5).grid(row=5, column=3, sticky="w")
 
-    ttk.Label(root, text="Select Field to Position:").grid(row=6, column=0, sticky="e")
-    ttk.OptionMenu(root, selected_field, selected_field.get(), *field_positions.keys()).grid(row=6, column=1, sticky="w")
-
-    ttk.Button(root, text="Generate QSL Cards", command=generate_cards).grid(row=7, column=0, columnspan=2, pady=10)
-    ttk.Button(root, text="Reset Markers", command=reset_markers).grid(row=7, column=2, columnspan=2)
+    ttk.Button(root, text="Generate QSL Cards", command=generate_cards).grid(row=7, column=1, columnspan=1, pady=10)
+    ttk.Button(root, text="Backup Profiles", command=select_backup_dir).grid(row=7, column=2, columnspan=1, pady=10)
+    ttk.Button(root, text="Restore Profiles", command=select_restore_file).grid(row=7, column=3, columnspan=1, pady=10)
 
     canvas.bind("<Button-1>", on_canvas_click)
 
