@@ -59,8 +59,7 @@ jobs:
       steps:
         - name: Build DMG 
           run: dmgbuild -s settings.py "QSLcraft" dist/QSLcraft.dmg
-        - name: Upload Artifact (macOS)
-          uses: actions/upload-artifact@v4
+        - uses: actions/upload-artifact@v4
           with:
             name: macos-executables
             path: dist/
