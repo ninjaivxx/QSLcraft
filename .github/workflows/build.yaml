@@ -37,7 +37,7 @@ jobs:
 
     - name: Build executable
       run: |
-        pyinstaller ${{ env.MAIN_PY_FILE }}
+        pyinstaller --windowed ${{ env.MAIN_PY_FILE }}
       working-directory: ./
 
     - name: Create Artifact (Windows)
@@ -54,9 +54,9 @@ jobs:
         name: linux-executables
         path: dist/
 
-    - name: Create Artifact (macOS)
-      if: matrix.os == 'macos-latest'
-      run: dmgbuild -s settings.py "QSLcraft" dist/QSLcraft.dmg
+    # - name: Create Artifact (macOS)
+    #   if: matrix.os == 'macos-latest'
+    #   run: dmgbuild -s settings.py "QSLcraft" dist/QSLcraft.dmg
 
     - name: Upload Artifact (macOS)
       if: matrix.os == 'macos-latest'
