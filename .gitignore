@@ -210,3 +210,7 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# MacOS specific files
+.DS_Store
+*.dmg
