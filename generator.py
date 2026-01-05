@@ -27,5 +27,5 @@ def generate_card(qso, positions, font, image_path, output_dir):
     draw_centered_text(draw, mode, positions["mode"], font)
     draw_centered_text(draw, rst, positions["report"], font)
 
-    out_path = os.path.join(output_dir, f"qsl_{call}_{date}.png")
+    out_path = os.path.join(output_dir, f"qsl_{call.replace('/', '_')}_{date}-{utc}.png")
     card.save(out_path)
